@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"             
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-horas-descontar">
+        <div class="form-row mt-5">
+            <div class="form-group col-4">
+                <p:outputLabel for="situacao" value="Empresa" />
+                <p:selectOneMenu id="empresa" value="#{controllerReport.filter.empresa}" converter="converterEmpresa" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems value="#{controllerReport.listEmpresa}" var="emp" itemValue="#{emp}" itemLabel="#{emp}"/>
+                    <p:ajax event="change"  update="departamento" listener="#{controllerReport.loadListDepartamento()}"  />
+                    <p:ajax event="change" update="funcionario" listener="#{controllerReport.loadListFuncionario()}"  />
+                </p:selectOneMenu>
+            </div>
+            <div class="form-group col-4">
+                <p:outputLabel for="departamento" value="Departamento"/>
+                <p:selectCheckboxMenu id="departamento" label="departamento" value="#{controllerReport.filter.listDepartamento}" converter="converterDepartamento"  filter="true" filterMatchMode="contains"  >
+
+                    <f:selectItems value="#{controllerReport.listDepartamento}" var="dep" itemValue="#{dep}" itemLabel="#{dep}"/>
+                    <p:ajax event="change" update="funcionario" listener="#{controllerReport.loadListFuncionario()}"  />
+                </p:selectCheckboxMenu>            
+            </div>                                        
+            <div class="form-group col-4">
+                <p:outputLabel for="funcionario" value="Funcionário" />
+                <p:selectOneMenu id="funcionario" value="#{controllerReport.filter.funcionario}" converter="converterFuncionario" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems value="#{controllerReport.listFuncionario}" var="func" itemValue="#{func}" itemLabel="#{func}"/>
+                </p:selectOneMenu>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-3">
+                <p:outputLabel for="decisao" value="Decisão" />
+                <p:selectOneMenu id="decisao" value="#{controllerReport.filter.decisao}" converter="converterDecisao" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems  value="#{controllerReport.listDecisao}" var="dec" itemValue="#{dec}" itemLabel="#{dec}" />
+                </p:selectOneMenu>
+            </div>
+            <div class="form-group col-3">
+                <p:outputLabel for="situacao" value="Situação" />
+                <p:selectOneMenu id="situacao" value="#{controllerReport.filter.situacao}" converter="converterSituacao" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems  value="#{controllerReport.listSituacao}" var="sit" itemValue="#{sit}" itemLabel="#{sit}" />
+                </p:selectOneMenu>
+            </div>
+            <div class="form-group col-2">
+                <p:outputLabel for="Tipo" value="Tipo" />
+                <p:selectOneMenu id="Tipo" value="#{controllerReport.filter.tipo}" converter="converterTipo" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems  value="#{controllerReport.listTipo}" var="tip" itemValue="#{tip}" itemLabel="#{tip}" />
+                </p:selectOneMenu>
+            </div>
+            <div class="form-group col-2">
+                <p:outputLabel for="dt-inicial" value="Data inicial"/>
+                <p:calendar id="dt-inicial" value="#{controllerReport.filter.dtInicial}" locale="pt" navigator="true" pattern="dd/MM/yyyy" mask="true" styleClass="w-100" required="true" requiredMessage="Informe a data inicial" />
+            </div>
+            <div class="form-group col-2">
+                <p:outputLabel for="dt-final" value="Data final"/>
+                <p:calendar id="dt-final" value="#{controllerReport.filter.dtFinal}" locale="pt" navigator="true" pattern="dd/MM/yyyy" mask="true" styleClass="w-100" required="true" requiredMessage="Informe a data final" />
+            </div> 
+        </div>
+
+        <div class="text-right m t-5">
+            <p:commandLink id="bt-gerar" update="fm-tb-r-ocorrencias" actionListener="#{controllerReport.reportGeralOcorrencia()}" styleClass="btn btn-primary btn-lg" >
+                <i class="fa fa-print" aria-hidden="true"></i> Gerar relatório
+            </p:commandLink>
+        </div>
+
+    </h:form>
+    <hr/>    
+
+    <ui:include src="/public/pages/relatorio/confirmacao.xhtml" />
+    <ui:include src="/public/pages/relatorio/list.xhtml" />
+    <ui:include src="/public/pages/o_visualizar/show.xhtml" />
+
+
+
+</ui:fragment>

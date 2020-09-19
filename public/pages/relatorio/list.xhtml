@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:form id="fm-tb-r-ocorrencias">
+
+        <p:dataTable id="tb-r-ocorrencias"
+                     value="#{controllerReport.ocorrenciasResult}" 
+                     var="ocorrencia" 
+                     widgetVar="tb-r-ocorrencia"
+                     reflow="true"                     
+                     scrollable="true"
+                     selectionMode="single"    
+                     rowKey="#{ocorrencia.idOcorrencia}"
+                     rows="10"
+                     rowStyleClass=""
+                     lazy="true"
+                     paginator="true"
+                     paginatorPosition="bottom"                     
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{startRecord} de {totalRecords}"
+                     rowsPerPageTemplate="5, 10, 15, 20"
+                     emptyMessage="Nenhum registro encontrado"    
+                     >         
+
+            <p:column headerText="Matricula" sortBy="#{ocorrencia.idFuncionario.txMatricula}">
+                #{ocorrencia.idFuncionario.txMatricula}
+            </p:column>
+            <p:column headerText="Funcionario" sortBy="#{ocorrencia.idFuncionario.txNome}">
+                #{ocorrencia.idFuncionario.txNome}
+            </p:column>
+
+            <p:column headerText="Tipo">
+                #{ocorrencia.tipo}
+            </p:column>
+            <p:column headerText="Decisão">
+                #{ocorrencia.decisao}
+            </p:column>
+            <p:column headerText="Situação" sortBy="#{ocorrencia.csSituacao}" >
+                <span class="badge badge-#{controllerOcorrencia.getBadgeColor(ocorrencia.csSituacao)}">
+                    <h:outputText id="situacao" value="#{ocorrencia.situacao}" />
+                    <p:tooltip for="situacao" value="#{ocorrencia.situacao}" position="top"/>
+                </span>
+            </p:column>
+            <p:column headerText="Data inicial">
+                #{ocorrencia.dataInicial}
+            </p:column>
+            <p:column headerText="Data final">
+                #{ocorrencia.dataFinal}
+            </p:column> 
+            <p:column headerText="Confirmar Compro,">
+                <!-- onchange="PF('md-cancelar-ocorrencia').show()" 
+                <p:selectBooleanCheckbox id="chk-comprovante" value="# {ocorrencia.csComprovante}"    >
+                    <p:tooltip for="chk-comprovante" value="Confirmar comprovante" position="top"/> 
+                    <p:ajax event="change"  listener="# {controllerReport.showConfirm()}" />
+                </p:selectBooleanCheckbox>-->
+
+                <!-- 
+                    onchange="PF('md-confirma-comprovante').show()"
+                -->
+
+                <p:selectBooleanCheckbox   
+                    id="chk"
+                    widgetVar="chk-comprovante-#{ocorrencia.idOcorrencia}"  
+                    value="#{ocorrencia.csComprovante}" 
+                    disabled="#{ocorrencia.csComprovante || ocorrencia.blArquivo ne null}" >
+
+                    <p:ajax update="fm-confirmar-comprovante" event="change"  listener="#{controllerReport.showConfirm(ocorrencia)}"/>
+
+                </p:selectBooleanCheckbox>
+                <p:tooltip for="chk" value="Confirmar comprovante" position="top"/> 
+            </p:column>
+            <p:column headerText="Comprovante">
+                <p:lightBox id="lightbox">  
+                    <h:outputLink value="#" rendered="#{ocorrencia.blArquivo ne null}" styleClass="badge badge-warning"> 
+                        #{ocorrencia.txNomeArquivo}
+                    </h:outputLink>
+
+                    <f:facet name="inline">
+                        <img src="data:image;base64,#{ocorrencia.arquivoBase64}" class="img-rounded" style="height: 600px; width: 500px" />
+                    </f:facet>  
+                </p:lightBox>
+            </p:column>
+
+            <p:column>
+                <p:commandLink id="bt-visualizar" update=":fm-visualizar-ocorrencia" oncomplete="PF('md-visualizar-ocorrencia').show()" styleClass="btn btn-info btn-sm mr-2">
+                    <i class="fa fa-th" aria-hidden="true"></i>
+                    <p:resetInput target=":fm-visualizar-ocorrencia" />
+                    <f:setPropertyActionListener value="#{ocorrencia}" target="#{controllerOVisualizar.ocorrencia}" />
+                    <!--<f:actionListener binding="# {controllerOAutorizar.loadListOcorrencia()}" />-->
+                    <f:actionListener binding="#{controllerOVisualizar.loadListFuncionario()}" />
+                    <f:actionListener binding="#{controllerOVisualizar.loadListVeiculo()}" />
+                    <p:tooltip for="bt-visualizar" value="Visualizar" position="top"/>
+                </p:commandLink>
+            </p:column>
+
+
+        </p:dataTable>
+    </h:form>
+
+</ui:fragment>

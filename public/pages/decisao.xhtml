@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"             
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"
+             > 
+
+    <h:form id="fm-decisao">
+        <p:defaultCommand target="bt-filtrar" />
+        
+        <div class="form-row mt-5">
+            <div class="col-lg-6 col-xs-6">  
+                <div class="form-group pull-left">
+                    <p:commandLink id="bt-atualizar" update="fm-tb-decisao" styleClass="btn btn-primary ">
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                        <p:tooltip for="bt-atualizar" value="Atualizar registros" position="top"/> 
+                    </p:commandLink>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xs-6 ">
+                <div class="form-group pull-right">
+                    <div class="table-filter">
+                        <div class="btn-group ">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-filter" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-filter">
+                                <div class="px-3">
+                                    <div class="form-row pt-1">
+                                        <p:inputText widgetVar="codigo" id="codigo" value="#{controllerODecisao.filter.id}" placeholder="Código" />
+                                    </div>
+                                    <div class="form-row pt-1">
+                                        <p:autoComplete id="departamento" value="#{controllerODecisao.filter.departamento}" placeholder="Departamento" var="dp" itemValue="#{dp}" itemLabel="#{dp}" completeMethod="#{controllerODecisao.filter.autoCompleteDepartamento}" maxResults="5" styleClass="w-100" />
+                                    </div>                                        
+                                    <div class="form-row pt-1">
+                                        <p:autoComplete id="funcionario" value="#{controllerODecisao.filter.funcionario}" placeholder="Funcionário" var="fc" itemValue="#{fc}" itemLabel="#{fc}" completeMethod="#{controllerODecisao.filter.autoCompleteFuncionario}" maxResults="5" styleClass="w-100"/>
+                                    </div>
+                                    <div class="form-row pt-1">
+                                        <p:autoComplete id="tipo" value="#{controllerODecisao.filter.tipo}" placeholder="Tipo" var="tp" itemValue="#{tp}" itemLabel="#{tp}" completeMethod="#{controllerODecisao.filter.autoCompleteTipo}" maxResults="5" styleClass="w-100" />
+                                    </div>
+                                    <div class="form-row pt-1">
+                                        <p:autoComplete id="motivo" value="#{controllerODecisao.filter.motivo}" placeholder="Motivo" var="mt" itemValue="#{mt}" itemLabel="#{mt}" completeMethod="#{controllerODecisao.filter.autoCompleteMotivo}" maxResults="5" styleClass="w-100" />
+                                    </div>
+                                    <div class="form-row pt-1">
+                                        <p:calendar id="dt-inicial" value="#{controllerODecisao.filter.dtInicial}" placeholder="Data inicial" locale="pt" navigator="true" pattern="dd/MM/yyyy" mask="true" styleClass="w-100" />
+                                    </div>
+                                    <div class="form-row pt-1">
+                                        <p:calendar id="dt-final" value="#{controllerODecisao.filter.dtFinal}" placeholder="Data final" locale="pt" navigator="true" pattern="dd/MM/yyyy" mask="true" styleClass="w-100" />
+                                    </div>
+                                    <div class="form-row pt-2">
+                                        <p:commandLink id="bt-limpar" update="fm-decisao fm-tb-decisao" actionListener="#{controllerODecisao.filterClear()}" oncomplete="PF('codigo').jq.focus();" styleClass="btn btn-warning btn-block">
+                                            <i class="fa fa-close" aria-hidden="true"></i> Limpar 
+                                            <p:resetInput target="fm-decisao" />
+                                            <f:actionListener binding="#{controllerODecisao.filterTable()}" />
+                                        </p:commandLink>
+                                        <p:commandLink id="bt-filtrar" update="fm-tb-decisao" actionListener="#{controllerODecisao.filterTable()}" styleClass="btn btn-primary btn-block">
+                                            <i class="fa fa-filter" aria-hidden="true"></i> Filtrar
+                                        </p:commandLink>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>  
+        </div>
+
+    </h:form> 
+
+    <ui:include src="/public/pages/o_decisao/manager.xhtml" />
+    <ui:include src="/public/pages/o_decisao/finished.xhtml" />
+    <ui:include src="/public/pages/o_decisao/list.xhtml" />
+    <ui:include src="/public/pages/o_visualizar/show.xhtml" />
+
+</ui:fragment>

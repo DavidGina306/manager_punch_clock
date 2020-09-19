@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-excluir-departamento">
+
+        <p:dialog id="md-excluir-departamento" widgetVar="md-excluir-departamento" focus="bt-nao" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" width="300" styleClass="modal-response">	
+
+            <f:facet name="header">
+                <h4 class="modal-title">#{controllerHome.pageTitle}</h4>
+            </f:facet>
+
+            <div class="mb-3">
+                <b>##{controllerDepartamento.departamento.txDescricao}</b>
+            </div>
+
+            <h:outputText id="confirma" value="Confirma exclusão?"/>
+
+            <f:facet name="footer">
+
+                <p:link id="bt-nao" onclick="PF('md-excluir-departamento').hide();return false;" styleClass="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Não
+                </p:link>
+
+                <p:commandLink id="bt-sim" update="growl, :fm-tb-departamento" oncomplete="closeDialog(args, 'md-excluir-departamento')" actionListener="#{controllerDepartamento.delete()}" styleClass="btn btn-danger" >
+                    <i class="fa fa-check" aria-hidden="true"></i> Sim
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+
+    </h:form>
+
+</ui:fragment>

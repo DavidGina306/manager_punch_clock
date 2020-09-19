@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-comprovante" enctype="multipart/form-data">
+
+        <p:dialog id="md-comprovante" widgetVar="md-comprovante" styleClass="modal-response" width="600" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+
+            <f:facet name="header">
+                <h4 class="modal-title">Comprovante</h4>
+            </f:facet>
+
+            <p:outputPanel id="pn-comprovante" >
+
+                <p:fileUpload id="bt-comprovante" 
+                              oncomplete="PF('md-comprovante').hide()"
+                              fileUploadListener="#{controllerOcorrencia.fileUploadListener}" 
+                              label="Comprovante" 
+                              uploadLabel="Enviar" 
+                              cancelLabel="Cancelar"
+                              invalidSizeMessage="O arquivo excede o tamanho permitido"
+                              invalidFileMessage="Arquivo não permitido"
+                              fileLimitMessage="Apenas um arquivo pode ser adicionado"
+                              mode="advanced" 
+                              auto="false"
+                              sizeLimit="5242880" 
+                              fileLimit="1"                           
+                              allowTypes="/(\.|\/)(jpe?g|png)$/" 
+                              styleClass="btn-file"                          
+                              >                
+
+                </p:fileUpload>                                  
+
+            </p:outputPanel>
+
+            <div class="text-center pt-2 px-0">
+                <span class="badge label-info">Arquivos permitidos (.png | .jpg | .jpeg).</span>
+            </div>
+
+        </p:dialog>  
+
+    </h:form>
+
+</ui:fragment>

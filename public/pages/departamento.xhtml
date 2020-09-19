@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"             
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-departamento"> 
+        <div class="form-row">
+            <div class="form-group col-2">
+                <p:commandLink id="bt-novo" update=":fm-novo-departamento" actionListener="#{controllerDepartamento.newDepartamento()}" oncomplete="PF('md-novo-departamento').show()" styleClass="btn btn-primary w-100">
+                    <p:resetInput target=":fm-novo-departamento" />
+                    <f:actionListener binding="#{controllerDepartamento.loadListEmpresa()}" />
+                    <i class="fa fa-plus" aria-hidden="true"></i> Novo departamento
+                </p:commandLink>   
+            </div>
+        </div>
+    </h:form>
+
+    <ui:include src="/public/pages/departamento/addOrEdit.xhtml" />
+    <ui:include src="/public/pages/departamento/delete.xhtml" />
+    <ui:include src="/public/pages/departamento/list.xhtml" />
+
+</ui:fragment>

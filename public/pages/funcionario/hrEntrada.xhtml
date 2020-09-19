@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-horario">
+        <p:dialog id="md-horario" widgetVar="md-horario" styleClass="modal-response" width="400" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+
+            <f:facet name="header">
+                <h4 class="modal-title">Hora máxima de entrada</h4>
+            </f:facet> 
+
+            <p:outputPanel id="pn-horario">
+                <p:focus context="pn-horario"/>
+
+                <div class="form-group">
+                    <p:outputLabel for="departamento" value="Departamento" />
+                    <p:selectOneMenu id="departamento" value="#{controllerFHoraLimite.departamento}" required="true" requiredMessage="Informe o departamento" converter="converterDepartamento" filter="true" filterMatchMode="contains" styleClass="form-control">
+                        <f:selectItem itemValue="" itemLabel="" />
+                        <f:selectItems value="#{controllerFHoraLimite.listDepartamento}" var="departamento" itemValue="#{departamento}" itemLabel="#{departamento}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="form-group">
+                    <p:outputLabel for="hr-entrada" value="Horário limite p/ entrada"/>                    
+                    <p:inputMask id="hr-entrada" value="#{controllerFHoraLimite.hora}" required="true" requiredMessage="Informe a hora máx. de entrada" mask="99:99:99" />
+                </div>
+
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <button type="button" onclick="PF('md-horario').hide();"  class="btn btn-secondary mr-2" >
+                    <i class="fa fa-remove" aria-hidden="true"></i> Fechar
+                </button>
+
+                <p:commandLink update="growl, pn-horario, :fm-tb-funcionario" actionListener="#{controllerFHoraLimite.updateTime()}" styleClass="btn btn-primary" >
+                    <i class="fa fa-check" aria-hidden="true"></i> Confirmar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+    </h:form>
+
+
+</ui:fragment>

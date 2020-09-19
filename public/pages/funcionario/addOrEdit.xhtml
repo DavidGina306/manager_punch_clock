@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-novo-funcionario">
+
+        <p:dialog id="md-novo-funcionario" widgetVar="md-novo-funcionario" styleClass="modal-response" width="550" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+            <p:defaultCommand target="bt-salvar" />
+
+            <f:facet name="header">
+                <h4 class="modal-title">#{controllerHome.pageTitle}</h4>
+            </f:facet>
+
+            <p:outputPanel id="pn-perfil-funcionario">
+                <p:focus context="pn-perfil-funcionario"/>
+
+                <div class="form-group">
+                    <p:outputLabel for="empresa" value="Empresa" />
+                    <p:selectOneMenu id="empresa" required="true" requiredMessage="Informe a empresa" value="#{controllerFuncionario.funcionario.idEmpresa}" converter="converterEmpresa" filter="true" filterMatchMode="contains" styleClass="form-control">
+                        <f:selectItem itemValue="" itemLabel=""/>
+                        <f:selectItems value="#{controllerFuncionario.listEmpresa}" var="empresa" itemValue="#{empresa}" itemLabel="#{empresa}"/>
+                        <p:ajax event="change" update="departamento" listener="#{controllerFuncionario.loadListDepartamento()}"  />
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-lg-3">
+                        <p:outputLabel for="matricula" value="Matrícula" />
+                        <p:inputText id="matricula" required="true" requiredMessage="Informe a matrícula" value="#{controllerFuncionario.funcionario.txMatricula}"/>
+                    </div>
+
+                    <div class="form-group col-lg-9">
+                        <p:outputLabel for="nome" value="Nome" />
+                        <p:inputText id="nome" required="true" requiredMessage="Informe o nome" value="#{controllerFuncionario.funcionario.txNome}"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-lg-3">
+                        <p:outputLabel for="hr-max-entrada" value="Hr. limite" />                    
+                        <p:inputMask id="hr-max-entrada" widgetVar="hr-max-entrada" value="#{controllerFuncionario.funcionario.txHrEntrada}" required="true" requiredMessage="Informe a hora limite p/ entrada" mask="99:99:99" />
+                    </div> 
+
+                    <div class="form-group col-lg-9">
+                        <p:outputLabel for="departamento" value="Departamento" />
+                        <p:selectOneMenu id="departamento" required="true" requiredMessage="Informe o departamento" value="#{controllerFuncionario.funcionario.idDepartamento}" converter="converterDepartamento" filter="true" filterMatchMode="contains" styleClass="form-control">
+                            <f:selectItem itemValue="" itemLabel=""/>
+                            <f:selectItems value="#{controllerFuncionario.listDepartamento}" var="dep" itemValue="#{dep}" itemLabel="#{dep}"/>
+                        </p:selectOneMenu>
+                    </div>           
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-lg-6">
+                        <p:outputLabel for="cargo" value="Cargo" />
+                        <p:selectOneMenu id="cargo" required="true" requiredMessage="Informe o cargo" value="#{controllerFuncionario.funcionario.csCargo}" filter="true" filterMatchMode="contains" styleClass="form-control" panelStyleClass="hideDisabled">
+                            <f:selectItem itemValue="" itemLabel=""/>
+                            <f:selectItem itemValue="0" itemDisabled="#{!controllerHome.accessAuthorized(0)}" itemLabel="Administrador" />
+                            <f:selectItem itemValue="3" itemLabel="Colaborador" />
+                            <f:selectItem itemValue="1" itemLabel="Gerente" />
+                            <f:selectItem itemValue="4" itemLabel="Diretoria" />
+                            <f:selectItem itemValue="2" itemLabel="Supervisor" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="form-group col-lg-6">
+                        <p:outputLabel for="tipo" value="Tipo" />
+                        <p:selectOneMenu id="tipo" required="true" requiredMessage="Informe o tipo" value="#{controllerFuncionario.funcionario.csTipo}" filter="true" filterMatchMode="contains" styleClass="form-control" panelStyleClass="hideDisabled">
+                            <f:selectItem itemValue="" itemLabel=""/>
+                            <f:selectItem itemValue="0" itemDisabled="#{!controllerHome.accessAuthorized(0)}" itemLabel="Administrador" />
+                            <f:selectItem itemValue="1" itemLabel="Autorizador" />
+                            <f:selectItem itemValue="4" itemLabel="Colaborador" />
+                            <f:selectItem itemValue="3" itemLabel="Departamento pessoal" />
+                            <f:selectItem itemValue="2" itemLabel="Portaria" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <p:selectBooleanCheckbox id="gerencial" value="#{controllerFuncionario.funcionario.csGerencial}" />
+                        <h:outputLabel value="Gerencial" />
+                    </div>  
+
+                    <div class="col">
+                        <p:selectBooleanCheckbox id="ativo" value="#{controllerFuncionario.funcionario.csAtivo}" />
+                        <h:outputLabel value="Ativo" />
+                    </div>
+                </div>
+
+
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <p:commandLink id="bt-senha-padrao" update="growl" actionListener="#{controllerFuncionario.resetPassword()}" rendered="#{controllerFuncionario.funcionario.idFuncionario != null}" styleClass="btn btn-danger mr-2">
+                    <i class="fa fa-lock" aria-hidden="true"></i> Restaurar senha padrão
+                </p:commandLink>
+
+                <button id="bt-cancelar" type="button" onclick="PF('md-novo-funcionario').hide();" class="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </button>
+
+                <p:commandLink id="bt-salvar" update="growl, pn-perfil-funcionario, :fm-tb-funcionario, :fm-navbar" oncomplete="closeDialog(args, 'md-novo-funcionario')" actionListener="#{controllerFuncionario.insertOrUpdate()}" styleClass="btn btn-primary" >
+                    <i class="fa fa-save" aria-hidden="true"></i> Salvar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+
+    </h:form>
+
+</ui:fragment>

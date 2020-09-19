@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-novo-veiculo">
+
+        <p:dialog widgetVar="mdVeic" styleClass="modal-response" width="550" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+
+            <f:facet name="header">
+                <h4 class="modal-title">#{controllerHome.pageTitle}</h4>
+            </f:facet>
+
+            <p:outputPanel id="pn-veiculo">
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <p:outputLabel for="empresa" value="Empresa" />
+                        <p:selectOneMenu id="empresa" required="true" requiredMessage="Informe a empresa" value="#{controllerVeiculo.veiculo.idEmpresa}" converter="converterEmpresa" filter="true" filterMatchMode="contains" styleClass="form-control">
+                            <f:selectItem itemValue="" itemLabel=""/>
+                            <f:selectItems value="#{controllerVeiculo.listEmpresa}" var="empresa" itemValue="#{empresa}" itemLabel="#{empresa}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <p:outputLabel for="departamento" value="Departamento" />
+                        <p:selectOneMenu id="departamento" required="true" requiredMessage="Informe o departamento" value="#{controllerVeiculo.veiculo.idDepartamento}" converter="converterDepartamento" filter="true" filterMatchMode="contains" styleClass="form-control">
+                            <f:selectItem itemValue="" itemLabel=""/>
+                            <f:selectItems value="#{controllerVeiculo.listDepartamento}" var="dep" itemValue="#{dep}" itemLabel="#{dep}"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-6">                    
+                        <p:outputLabel for="placa" value="Placa"/>
+                        <p:inputMask id="placa" required="true" requiredMessage="Informe a placa" value="#{controllerVeiculo.veiculo.txPlaca}" mask="a**-9999" />
+                    </div>
+
+                    <div class="form-group col-lg-6">
+                        <p:outputLabel for="modelo" value="Modelo"/>
+                        <p:inputText id="modelo" required="true" requiredMessage="Informe o modelo" value="#{controllerVeiculo.veiculo.txModelo}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p:outputLabel for="marca" value="Marca"/>
+                    <p:inputText id="marca" required="true" requiredMessage="Informe a marca" value="#{controllerVeiculo.veiculo.txMarca}" />
+                </div>
+
+                <div class="form-group">
+                    <p:selectBooleanCheckbox value="#{controllerVeiculo.veiculo.csAtivo }" />
+                    <h:outputLabel value="Ativo" />
+                </div>
+
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <p:link id="bt-cancelar" styleClass="btn btn-secondary mr-2" onclick="PF('mdVeic').hide();return false;" >
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </p:link>
+
+                <p:commandLink id="bt-salvar" styleClass="btn btn-primary" update="growl, pn-veiculo, :fm-tb-veiculo" oncomplete="closeDialog(args, 'mdVeic')" actionListener="#{controllerVeiculo.insertOrUpdate()}">
+                    <i class="fa fa-save" aria-hidden="true"></i> Salvar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+
+    </h:form>
+
+</ui:fragment>

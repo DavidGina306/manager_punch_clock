@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-tb-autorizar">
+
+        <p:dataTable id="tb-ocorrencia"
+                     var="ocorrencia" 
+                     value="#{controllerOAutorizar.listOcorrencia}" 
+                     widgetVar="tb-ocorrencia"
+                     reflow="true"                     
+                     scrollable="true"
+                     selectionMode="single"    
+                     rowKey="#{ocorrencia.idOcorrencia}"
+                     rows="10"
+                     lazy="true"
+                     paginator="true"
+                     paginatorPosition="bottom"                     
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{startRecord} de {totalRecords}"
+                     rowsPerPageTemplate="5, 10, 15, 20"
+                     emptyMessage="Nenhum registro encontrado"               
+                     >             
+
+            <p:column headerText="Código" sortBy="#{ocorrencia.idOcorrencia}" filterBy="#{ocorrencia.idOcorrencia}" > 
+                <h:outputText id="codigo" value="#{ocorrencia.idOcorrencia}">
+                    <f:convertNumber pattern="0000000" />
+                </h:outputText>
+                <p:tooltip for="codigo" value="#{ocorrencia.idOcorrencia}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Funcionário" sortBy="#{ocorrencia.idFuncionario}" > 
+                <h:outputText id="funcionario" value="#{ocorrencia.idFuncionario.txNome}" />
+                <p:tooltip for="funcionario" value="#{ocorrencia.idFuncionario.txNome}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Tipo" sortBy="#{ocorrencia.csTipo}" >
+                <h:outputText id="tipo" value="#{ocorrencia.tipo}" />
+                <p:tooltip for="tipo" value="#{ocorrencia.tipo}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Motivo" sortBy="#{ocorrencia.csMotivo}" >
+                <h:outputText id="motivo" value="#{ocorrencia.motivo}" />
+                <p:tooltip for="motivo" value="#{ocorrencia.motivo}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Decisão" sortBy="#{ocorrencia.csDecisao}" >
+                <h:outputText id="decisao" value="#{ocorrencia.decisao}" />
+                <p:tooltip for="decisao" value="#{ocorrencia.decisao}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Situação" sortBy="#{ocorrencia.csSituacao}" >
+                <span class="badge badge-#{controllerOAutorizar.getBadgeColor(ocorrencia.csSituacao) }">
+                    <h:outputText id="situacao" value="#{ocorrencia.situacao}" />
+                    <p:tooltip for="situacao" value="#{ocorrencia.situacao}" position="top"/>
+                </span>
+            </p:column>
+
+            <p:column headerText="Dt. inicial" >
+                <h:outputText id="dt-inicial" value="#{ocorrencia.dataInicial}" />
+                <p:tooltip for="dt-inicial" value="#{ocorrencia.dataInicial}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Dt. final" >
+                <h:outputText id="dt-final" value="#{ocorrencia.dataFinal}" />
+                <p:tooltip for="dt-final" value="#{ocorrencia.dataFinal}" position="top"/>
+            </p:column>
+
+            <p:column class="ui-column-button">
+
+                <p:commandLink id="bt-visualizar" update=":fm-visualizar-ocorrencia" oncomplete="PF('md-visualizar-ocorrencia').show()" styleClass="btn btn-info btn-sm mr-2">
+                    <i class="fa fa-th" aria-hidden="true"></i>
+                    <p:resetInput target=":fm-visualizar-ocorrencia" />
+                    <f:setPropertyActionListener value="#{ocorrencia}" target="#{controllerOVisualizar.ocorrencia}" />
+                    <!--<f:actionListener binding="# {controllerOAutorizar.loadListOcorrencia()}" />-->
+                    <f:actionListener binding="#{controllerOVisualizar.loadListFuncionario()}" />
+                    <f:actionListener binding="#{controllerOVisualizar.loadListVeiculo()}" />
+                    <p:tooltip for="bt-visualizar" value="Visualizar" position="top"/>
+                </p:commandLink>
+
+                <p:commandLink id="bt-n-autorizar" update=":fm-autorizar-nao" oncomplete="PF('md-autorizar-nao').show()" styleClass="btn btn-danger btn-sm mr-2" >
+                    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                    <f:setPropertyActionListener value="#{ocorrencia}" target="#{controllerOAutorizar.ocorrencia}" /> 
+                    <p:tooltip for="bt-n-autorizar" value="Não autorizar" position="top"/>
+                </p:commandLink>
+
+                <p:commandLink id="bt-autorizar" update=":fm-autorizar-sim" oncomplete="PF('md-autorizar-sim').show()" styleClass="btn btn-success btn-sm">
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    <f:setPropertyActionListener value="#{ocorrencia}" target="#{controllerOAutorizar.ocorrencia}" /> 
+                    <p:tooltip for="bt-autorizar" value="Autorizar" position="top"/>
+                </p:commandLink>
+
+            </p:column>
+
+            <f:facet name="footer" >
+                Total de #{controllerOAutorizar.listOcorrencia.rowCount} registro(s).
+            </f:facet>
+
+        </p:dataTable>        
+    </h:form>
+
+</ui:fragment>

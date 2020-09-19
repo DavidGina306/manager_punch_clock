@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"     
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-confirmar-comprovante"  >
+        <p:dialog 
+            header="Confirmar entrega"
+            widgetVar="md-confirma-comprovante" 
+            modal="true"
+            styleClass="modal-response" 
+            width="300" 
+            closable="false"  
+            closeOnEscape="false" 
+            responsive="true" 
+            resizable="false"
+            showEffect="fade" >
+            <p:outputLabel 
+                value="
+                Confirma entrega de comprovante da ocorrencia ? "
+                />
+            <p:outputLabel value="Nº: #{controllerReport.ocorrencia.idOcorrencia}"/>
+            <p:outputLabel value="Funcionario: #{controllerReport.ocorrencia.idFuncionario.txNome}"/>
+            <f:facet name="footer">
+                <p:commandButton 
+                    value= "Sim" 
+                    update="fm-tb-r-ocorrencias"  actionListener="#{controllerReport.confimarComprovante()}"
+                    oncomplete= "PF('md-confirma-comprovante').hide()"
+                    />
+                <p:commandButton 
+                    value= "Não" 
+                    update="fm-tb-r-ocorrencias" 
+                    actionListener="#{controllerReport.cancelaConfimarComprovante()}"   
+                    oncomplete="PF('md-confirma-comprovante').hide()"/>
+            </f:facet>
+        </p:dialog>
+    </h:form>
+</ui:fragment>

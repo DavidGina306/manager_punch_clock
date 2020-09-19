@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"             
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-funcionario">
+        <div class="form-row">
+            <div class="form-group col-2">
+                <p:commandLink update=":fm-novo-funcionario" actionListener="#{controllerFuncionario.newFuncionario()}" oncomplete="PF('md-novo-funcionario').show()" styleClass="btn btn-primary w-100">
+                    <p:resetInput target=":fm-novo-funcionario" />
+                    <!--      <f:actionListener binding="# {controllerFuncionario.loadListDepartamento()}" />
+                          <f:actionListener binding="# {controllerFuncionario.loadListEmpresa()}" /> -->
+                    <i class="fa fa-plus" aria-hidden="true"></i> Novo funcionário
+                </p:commandLink>
+            </div>
+            <div class="form-group col-3">
+                <p:commandLink update=":fm-horario" actionListener="#{controllerFHoraLimite.newHoraLimite()}" oncomplete="PF('md-horario').show()" styleClass="btn btn-secondary w-100">
+                    <p:resetInput target=":fm-horario" />
+                    <i class="fa fa-clock-o" aria-hidden="true"></i> Horário limite p/ entrada
+                </p:commandLink> 
+            </div>
+        </div>
+    </h:form>
+    <ui:include src="/public/pages/funcionario/hrEntrada.xhtml" />
+    <ui:include src="/public/pages/funcionario/addOrEdit.xhtml" />
+    <ui:include src="/public/pages/funcionario/delete.xhtml" />
+    <ui:include src="/public/pages/funcionario/list.xhtml" /> 
+
+</ui:fragment>

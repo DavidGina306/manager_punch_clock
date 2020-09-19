@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-tb-empresa">
+
+        <p:dataTable id="tb-empresa" 
+                     value="#{controllerEmpresa.listEmpresa}" 
+                     var="empresa" 
+                     widgetVar="tb-empresa"
+                     reflow="true" 
+                     scrollable="true"
+                     selectionMode="single" 
+                     rowKey="#{empresa.idEmpresa}" 
+                     rows="10" 
+                     lazy="true"
+                     paginator="true"
+                     paginatorPosition="bottom"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                     currentPageReportTemplate="{startRecord} de {totalRecords}" 
+                     rowsPerPageTemplate="5, 10, 15, 20" 
+                     emptyMessage="Nenhum registro encontrado"
+                     >
+
+            <f:facet name="header">
+
+                <div class="row">                 
+                    <div class="col-lg-8 col-xs-4">  
+                        <p:commandLink id="bt-atualizar" update="@form" styleClass="btn btn-primary pull-left">
+                            <i class="fa fa-refresh" aria-hidden="true"></i> 
+                            <p:tooltip for="bt-atualizar" value="Atualizar registros" position="top"/> 
+                        </p:commandLink>                         
+                    </div>
+
+                    <div class="col-lg-4 col-xs-8">  
+                        <div class="form-group has-feedback">
+                            <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+                            <p:inputText id="globalFilter" onkeypress="filterDataTable(event, 'tb-empresa')" styleClass="form-control" placeholder="Descrição"/>
+                        </div>
+                    </div>
+                </div>             
+
+            </f:facet>
+
+            <p:column headerText="Ativo" sortBy="#{empresa.csAtivo}" style="width: 100px">
+                <span class="badge badge-#{empresa.csAtivo ? 'success' : 'secondary'}">
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                </span>
+            </p:column>
+
+            <p:column headerText="Código" sortBy="#{empresa.idEmpresa}" filterBy="#{empresa.idEmpresa}"> 
+                <h:outputText id="codigo" value="#{empresa.idEmpresa}">
+                    <f:convertNumber pattern="0000000" />
+                </h:outputText>
+                <p:tooltip for="codigo" value="#{empresa.idEmpresa}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Nome fantasia" sortBy="#{empresa.txNomeFantasia}" filterBy="#{empresa.txNomeFantasia}">
+                <h:outputText id="nome-fantasia" value="#{empresa.txNomeFantasia}" />
+                <p:tooltip for="nome-fantasia" value="#{empresa.txNomeFantasia}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Dt. de cadastro" sortBy="#{empresa.dtCadastro}">
+                <h:outputText id="dt-cadastro" value="#{empresa.dtCadastro}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </h:outputText>
+                <p:tooltip for="dt-cadastro" value="#{empresa.dtCadastro}" position="top">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </p:tooltip>
+            </p:column>
+
+            <p:column styleClass="ui-column-button">
+
+                <p:commandLink id="bt-editar" update=":fm-novo-empresa" oncomplete="PF('md-novo-empresa').show()" styleClass="btn btn-success btn-sm mr-2">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <p:resetInput target=":fm-novo-empresa" />
+                    <f:setPropertyActionListener value="#{empresa}" target="#{controllerEmpresa.empresa}" />
+                    <p:tooltip for="bt-editar" value="Editar" position="top"/> 
+                </p:commandLink>
+
+                <p:commandLink id="bt-excluir" rendered="#{controllerHome.accessAuthorized(0)}" update=":fm-excluir-empresa" oncomplete="PF('md-excluir-empresa').show()" styleClass="btn btn-danger btn-sm" >                    
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <f:setPropertyActionListener value="#{empresa}" target="#{controllerEmpresa.empresa}" />
+                    <p:tooltip for="bt-excluir" value="Excluir" position="top"/> 
+                </p:commandLink>
+
+            </p:column>
+
+            <f:facet name="footer" >
+                Total de #{controllerEmpresa.listEmpresa.rowCount} registro(s).
+            </f:facet>
+
+        </p:dataTable>
+
+    </h:form>
+
+</ui:fragment>

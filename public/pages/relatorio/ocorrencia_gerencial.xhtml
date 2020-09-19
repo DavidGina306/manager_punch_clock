@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"             
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-horas-descontar">
+        <div class="form-row mt-5">
+            <!--  <div class="form-group col-6">
+                  <p:outputLabel for="funcionario" value="Funcionário" />
+                  <p:selectOneMenu id="funcionario" value="# {controllerReport.filter.funcionario}" converter="converterFuncionario" filter="true" filterMatchMode="contains">
+                      <f:selectItem itemValue="" itemLabel=""/>
+                      <f:selectItems value="# {controllerReport.listAutorizador}" var="func" itemValue="# {func}" itemLabel="# {func}"/>
+                  </p:selectOneMenu>
+              </div> -->
+        </div>
+        <div class="form-row">
+            <!--  <div class="form-group col-6">
+                  <p:outputLabel for="situacao" value="Situação" />
+                  <p:selectOneMenu id="situacao" value="# {controllerReport.filter.situacao}" filter="true" filterMatchMode="contains">
+                      <f:selectItem itemValue="" itemLabel=""/>
+                      <f:selectItem itemValue="3" itemLabel="Externo" />
+                      <f:selectItem itemValue="4" itemLabel="Externo (s/ autorização)" />
+                      <f:selectItem itemValue="5" itemLabel="Aguardando decisão" />
+                      <f:selectItem itemValue="6" itemLabel="Aguardando decisão (s/ autorização)" />
+                      <f:selectItem itemValue="7" itemLabel="Finalizada" />
+                  </p:selectOneMenu>
+              </div> -->
+            <div class="form-group col-6">
+                <p:outputLabel for="funcionario" value="Funcionário" />
+                <p:selectOneMenu id="funcionario" value="#{controllerReport.filter.funcionario}" converter="converterFuncionario" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems value="#{controllerReport.listAutorizador}" var="func" itemValue="#{func}" itemLabel="#{func}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="form-group col-3">
+                <p:outputLabel for="dt-inicial" value="Data inicial"/>
+                <p:calendar id="dt-inicial" value="#{controllerReport.filter.dtInicial}" locale="pt" navigator="true" pattern="dd/MM/yyyy" mask="true" styleClass="w-100" required="true" requiredMessage="Informe a data inicial" />
+            </div>
+            <div class="form-group col-3">
+                <p:outputLabel for="dt-final" value="Data final"/>
+                <p:calendar id="dt-final" value="#{controllerReport.filter.dtFinal}" locale="pt" navigator="true" pattern="dd/MM/yyyy" mask="true" styleClass="w-100" />
+            </div> 
+        </div>
+        <div class="text-right mt-5">
+            <p:commandLink id="bt-gerar" update="growl" actionListener="#{controllerReport.reportOcorrenciaGerencial()}" styleClass="btn btn-primary btn-lg" >
+                <i class="fa fa-print" aria-hidden="true"></i> Gerar relatório
+            </p:commandLink>
+        </div>
+    </h:form>
+
+</ui:fragment>

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"             
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head id="head">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <title>Ocorrência</title>       
+
+        <link rel="icon" type="image/x-icon" href="#{resource['img/favicon.png']}" />
+
+        <!--Latest compiled and minified CSS em font awsome-->
+        <h:outputStylesheet library="webjars" name="font-awesome/4.7.0/css/font-awesome.min-jsf.css" />
+
+       <!-- Latest compiled and minified CSS -->
+        <h:outputStylesheet library="library" name="bootstrap/css/bootstrap.min.css"/>
+
+        <!-- Latest compiled and minified Popper JS -->
+        <h:outputScript library="library" name="popper/umd/popper.min.js"  />
+
+        <!-- Latest compiled and minified JavaScript -->
+        <h:outputScript library="library" name="bootstrap/js/bootstrap.min.js"  />
+
+        <!-- CSS ocorrencia -->
+        <h:outputStylesheet library="css" name="ocorrencia.css"/>
+
+        <!-- JS ocorrencia -->
+        <h:outputScript library="js" name="ocorrencia.js"/>
+    </h:head> 
+    <h:body id="body">
+
+        <h:form id="form-ajax">
+            <p:ajaxStatus onstart="showLoading()" oncomplete="hideLoading()"></p:ajaxStatus>
+        </h:form>
+
+        <p:growl id="growl" life="5000" showDetail="true" showSummary="false" />
+
+        <h:form id="form-login">
+
+            <div class="form-login">
+                <img id="img-logo" src="resources/img/gruposb.png"/>
+                <h1>Sistema de ocorrência</h1>
+
+                <p:inputText id="matricula" placeholder="Matrícula" value="#{controllerLogin.matricula}" />
+                <p:password id="senha" placeholder="Senha" value="#{controllerLogin.senha}" />
+
+                <p:commandLink id="bt-entrar" update="growl, senha" action="#{controllerLogin.login()}" styleClass="btn btn-primary btn-login">
+                    <i class="fa fa-check" aria-hidden="true"></i> Entrar
+                </p:commandLink>
+                <hr/>
+                <p  class="text-right">Versão: <b>3.1.2</b></p>
+            </div>
+
+        </h:form>
+
+    </h:body>
+</html>

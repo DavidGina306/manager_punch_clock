@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"             
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-empresa">
+        <div class="form-row">
+            <div class="form-group col-2">
+                <p:commandLink id="bt-novo" update=":fm-novo-empresa" actionListener="#{controllerEmpresa.newEmpresa()}" oncomplete="PF('md-novo-empresa').show()" styleClass="btn btn-primary w-100">
+                    <p:resetInput target=":fm-novo-empresa" />
+                    <i class="fa fa-plus" aria-hidden="true"></i> Nova empresa
+                </p:commandLink>   
+            </div>
+        </div>
+    </h:form>
+
+    <ui:include src="/public/pages/empresa/addOrEdit.xhtml" />
+    <ui:include src="/public/pages/empresa/delete.xhtml" />
+    <ui:include src="/public/pages/empresa/list.xhtml" />
+
+</ui:fragment>

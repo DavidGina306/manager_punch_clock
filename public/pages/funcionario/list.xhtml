@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:include src="/public/pages/funcionario/autorizador/addOrEdit.xhtml" />
+
+    <h:form id="fm-tb-funcionario">
+
+        <p:dataTable id="tb-funcionario"
+                     value="#{controllerFuncionario.listFuncionario}" 
+                     var="funcionario" 
+                     widgetVar="tb-funcionario"
+                     reflow="true"                     
+                     scrollable="true"
+                     selectionMode="single"    
+                     rowKey="#{funcionario.idFuncionario}"
+                     rows="10"
+                     rowStyleClass="#{!controllerHome.accessControl.administrator and (funcionario.csTipo eq 0 or funcionario.csTipo eq 2) ? 'hidden' : ''}"
+                     lazy="true"
+                     paginator="true"
+                     paginatorPosition="bottom"                     
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{startRecord} de {totalRecords}"
+                     rowsPerPageTemplate="5, 10, 15, 20"
+                     emptyMessage="Nenhum registro encontrado"    
+                     
+               
+                     >         
+
+            <f:facet name="header">
+
+                <div class="row">                 
+                    <div class="col-lg-8 col-xs-4">  
+                        <p:commandLink id="bt-atualizar" update="@form" styleClass="btn btn-primary pull-left">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                            <p:tooltip for="bt-atualizar" value="Atualizar registros" position="top"/> 
+                        </p:commandLink>                         
+                    </div>
+
+                    <div class="col-lg-4 col-xs-8">  
+                        <div class="form-group has-feedback">
+                            <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+                            <p:inputText id="globalFilter" onkeypress="filterDataTable(event, 'tb-funcionario')" placeholder="Matrícula/Nome"/>
+                        </div>
+                    </div>
+                </div>  
+
+            </f:facet>
+
+            <p:column headerText="Ativo" sortBy="#{funcionario.csAtivo}" style="width: 100px">
+                <span class="badge badge-#{funcionario.csAtivo ? 'success' : 'secondary'}">
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                </span>               
+            </p:column>
+
+            <p:column headerText="Matricula" sortBy="#{funcionario.txMatricula}" filterBy="#{funcionario.txMatricula}"> 
+                <h:outputText id="matricula" value="#{funcionario.txMatricula}" />
+                <p:tooltip for="matricula" value="#{funcionario.txMatricula}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Nome" sortBy="#{funcionario.txNome}" filterBy="#{funcionario.txNome}">
+                <h:outputText id="nome" value="#{funcionario.txNome}" />
+                <p:tooltip for="nome" value="#{funcionario.txNome}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Departamento" sortBy="#{funcionario.idDepartamento}">
+                <h:outputText id="departamento" value="#{funcionario.idDepartamento.txDescricao}" />
+                <p:tooltip for="departamento" value="#{funcionario.idDepartamento.txDescricao}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Cargo" sortBy="#{funcionario.csCargo}">
+                <h:outputText id="cargo" value="#{funcionario.cargo}" />
+                <p:tooltip for="cargo" value="#{funcionario.cargo}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Tipo" sortBy="#{funcionario.csTipo}">
+                <h:outputText id="tipo" value="#{funcionario.tipo}" />
+                <p:tooltip for="tipo" value="#{funcionario.tipo}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Dt. de cadastro" sortBy="#{funcionario.dtCadastro}">
+                <h:outputText id="dt-cadastro" value="#{funcionario.dtCadastro}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </h:outputText>
+                <p:tooltip for="dt-cadastro" value="#{funcionario.dtCadastro}" position="top">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </p:tooltip>
+            </p:column>
+
+            <p:column styleClass="ui-column-button">   
+
+                <p:commandLink id="bt-autorizador" rendered="#{controllerHome.accessAuthorized(4)}" disabled="#{funcionario.csTipo gt 1}" 
+                               update=":fm-aut-departamento" oncomplete="PF('md-aut-departamento').show()" styleClass="btn btn-info btn-sm mr-2" >
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <p:resetInput target=":fm-aut-departamento" />  
+                    <f:setPropertyActionListener value="#{funcionario}" target="#{controllerFuncionario.funcionario}" />
+                    <f:actionListener binding="#{controllerFuncionario.loadListDepartamento()}" />
+                    <f:actionListener binding="#{controllerFuncionario.newDepartamentoAutorizador()}" />
+                  
+                    <p:tooltip for="bt-autorizador" value="Departamentos para autorizar" position="top"/> 
+                </p:commandLink>               
+
+                <p:commandLink id="bt-editar" update=":fm-novo-funcionario" oncomplete="PF('md-novo-funcionario').show()" styleClass="btn btn-success btn-sm mr-2">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <p:resetInput target=":fm-novo-funcionario" />
+                    <f:actionListener binding="#{controllerFuncionario.loadListDepartamento()}" />
+                    <f:actionListener binding="#{controllerFuncionario.loadListEmpresa()}" />
+                    <f:setPropertyActionListener value="#{funcionario}" target="#{controllerFuncionario.funcionario}" />
+                    <p:tooltip for="bt-editar" value="Editar" position="top"/> 
+                </p:commandLink>
+
+                <p:commandLink id="bt-excluir" rendered="#{controllerHome.accessAuthorized(0)}" update=":fm-excluir-funcionario" oncomplete="PF('md-excluir-funcionario').show()" styleClass="btn btn-danger btn-sm">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <f:setPropertyActionListener value="#{funcionario}" target="#{controllerFuncionario.funcionario}" />
+                    <p:tooltip for="bt-excluir" value="Excluir" position="top"/> 
+                </p:commandLink>
+
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</ui:fragment>

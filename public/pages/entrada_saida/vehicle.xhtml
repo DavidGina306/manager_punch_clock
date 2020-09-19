@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-es-veiculo">      
+        <p:dialog id="md-es-veiculo" widgetVar="md-es-veiculo" styleClass="modal-response" onHide="inputPortaria()" width="400" modal="true" resizable="false" closeOnEscape="true" closable="true" responsive="true" showEffect="fade" >
+
+            <p:defaultCommand target="bt-confirmar" />
+            <p:focus context="fm-es-veiculo" />
+
+            <f:facet name="header">
+                <h4 class="modal-title">Ocorrência</h4>
+            </f:facet>
+
+            <div class="form-group">
+                <h:outputLabel value="Veículo: "/> #{controllerEntradaSaida.ocorrencia.idVeiculo}
+            </div>
+
+            <p:outputPanel id="panVeiculo">
+
+                <div class="form-group" style="display: #{controllerEntradaSaida.ocorrencia.csSituacao eq 3 || controllerEntradaSaida.ocorrencia.csSituacao eq 4  ? 'none' : 'block'}">
+                    <p:outputLabel for="km-inicial" value="KM inicial" />
+                    <p:inputNumber id="km-inicial" value="#{controllerEntradaSaida.ocorrencia.nbKmInicial}" required="true" requiredMessage="Informe o KM inicial" disabled="#{controllerEntradaSaida.ocorrencia.csSituacao eq 3 || controllerEntradaSaida.ocorrencia.csSituacao eq 4  ? 'true' : 'false'}" decimalPlaces="0" thousandSeparator="" />
+                </div>
+
+                <div class="form-group" style="display: #{controllerEntradaSaida.ocorrencia.csSituacao eq 3 || controllerEntradaSaida.ocorrencia.csSituacao eq 4  ? 'block' : 'none'}">
+                    <p:outputLabel for="km-final" value="KM final" />
+                    <p:inputNumber id="km-final" value="#{controllerEntradaSaida.ocorrencia.nbKmFinal}" required="true" requiredMessage="Informe o KM final" disabled="#{controllerEntradaSaida.ocorrencia.csSituacao eq 3 || controllerEntradaSaida.ocorrencia.csSituacao eq 4  ? 'false' : 'true'}" decimalPlaces="0" thousandSeparator=""  />
+                </div>   
+
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <p:link id="bt-cancelar" onclick="PF('md-es-veiculo').hide();return false;" styleClass="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </p:link>
+
+                <p:commandLink id="bt-confirmar" update="growl, panVeiculo, :fm-tb-portaria:tb-portaria" oncomplete="closeDialog(args, 'md-es-veiculo')" actionListener="#{controllerEntradaSaida.confirmEntryOrExit()}" styleClass="btn btn-primary" >
+                    <i class="fa fa-check" aria-hidden="true"></i> Confirmar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>        
+    </h:form>
+
+</ui:fragment>

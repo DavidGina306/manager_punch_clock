@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-novo-departamento">
+
+        <p:dialog id="md-novo-departamento" widgetVar="md-novo-departamento" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" width="550" styleClass="modal-response">
+            <p:defaultCommand target="bt-salvar" />
+
+            <f:facet name="header">
+                <h4 class="modal-title">#{controllerHome.pageTitle}</h4>
+            </f:facet>
+
+            <p:outputPanel id="pn-departamento">                      
+                <p:focus context="pn-departamento"/>
+
+                <div class="form-group">
+                    <p:outputLabel for="empresa" value="Empresa" />
+                    <p:selectOneMenu id="empresa" required="true" requiredMessage="Informe a empresa" value="#{controllerDepartamento.departamento.idEmpresa}" converter="converterEmpresa" filter="true" filterMatchMode="contains" styleClass="form-control">
+                        <f:selectItem itemValue="" itemLabel=""/>
+                        <f:selectItems value="#{controllerDepartamento.listEmpresa}" var="empresa" itemValue="#{empresa}" itemLabel="#{empresa}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="form-group">
+                    <p:outputLabel for="descricao" value="Descrição"/>
+                    <p:inputText id="descricao" value="#{controllerDepartamento.departamento.txDescricao}" required="true" requiredMessage="Informe a descrição" />
+                </div>
+
+                <div class="form-group">
+                    <p:selectBooleanCheckbox value="#{controllerDepartamento.departamento.csAtivo}" />
+                    <h:outputLabel id="ativo" value="Ativo" />
+                </div>
+
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <button id="bt-cancelar" type="button" onclick="PF('md-novo-departamento').hide();" class="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </button>
+
+                <p:commandLink id="bt-salvar" update="growl, pn-departamento, :fm-tb-departamento" oncomplete="closeDialog(args, 'md-novo-departamento')" actionListener="#{controllerDepartamento.insertOrUpdate()}" styleClass="btn btn-primary" >
+                    <i class="fa fa-save" aria-hidden="true"></i> Salvar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+
+    </h:form>
+
+</ui:fragment>

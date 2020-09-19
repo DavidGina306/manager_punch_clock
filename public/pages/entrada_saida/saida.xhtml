@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fmSaida">
+        <p:dialog widgetVar="mdSaida" styleClass="modal-atraso modal-response" width="600" modal="true" resizable="false" onHide="inputPortaria()" closeOnEscape="true" closable="true" responsive="true" showEffect="fade" >
+
+            <f:facet name="header">
+                <h4 class="modal-title">Ocorrência de saída</h4>
+            </f:facet>
+
+            <p:dataTable id="funcionarioTable"
+                         var="funcionario"
+                         value="#{controllerESSaida.listFuncionario}"
+                         widgetVar="funcionarioTable"
+                         reflow="true"
+                         scrollable="true"
+                         rowKey="#{funcionario}"
+                         rows="5"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord} de {totalRecords}"
+                         rowsPerPageTemplate="5, 10, 15, 20"
+                         styleClass="table-saida"
+                         emptyMessage="Nenhum registro encontrado"
+                         >
+
+                <f:facet name="header">
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12">
+                            <div class="form-group has-feedback">
+                                <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+                                <p:inputText id="globalFilter"
+                                             value="#{controllerESSaida.tableFilter}"
+                                             onkeyup="if (event.keyCode !== 13)
+                                                         return false;"
+                                             styleClass="form-control atraso"
+                                             placeholder="Matrícula">
+                                    <p:ajax event="keyup" update="growl funcionarioTable" listener="#{controllerESSaida.handleKeyEvent}" oncomplete="closeDialogWithFocus(args, 'mdSaida'); refreshList()" />
+
+                                    <!--onblur="$('.atraso').focus()"-->
+                                </p:inputText>
+                            </div>
+                        </div>
+                    </div>
+                </f:facet>
+
+                <p:column headerText="Matrícula" >
+                    <h:outputText value="#{funcionario.txMatricula}" />
+                </p:column>
+
+                <p:column headerText="Funcionário" filterBy="#{funcionario.txNome}" >
+                    <h:outputText value="#{funcionario.txNome}" />
+                </p:column>
+
+                <p:column>
+
+                    <p:commandLink id="bt-action" update="growl  :fm-tb-portaria" style="margin-right: 10px;" styleClass="btn btn-primary btn-xs" oncomplete="closeDialogWithFocus(args, 'mdSaida')" >
+                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                        <f:actionListener binding="#{controllerESSaida.insertOrUpdate(funcionario) }" />
+                        <p:tooltip for="bt-action" value="Saída do funcionário" position="top"/>
+                        <f:actionListener binding="#{controllerEntradaSaida.onIdle()}" /> 
+                    </p:commandLink>
+
+                </p:column>
+
+            </p:dataTable>
+
+        </p:dialog>
+    </h:form>
+
+</ui:fragment>

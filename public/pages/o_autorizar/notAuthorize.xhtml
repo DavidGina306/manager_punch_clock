@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-autorizar-nao">
+        <p:dialog widgetVar="md-autorizar-nao" focus="bt-nao" styleClass="modal-response" width="300" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+
+            <f:facet name="header">
+                <h4 class="modal-title">Ocorrência</h4>
+            </f:facet>
+
+            <div class="mb-3">
+                <h:outputText id="codigo" value="#{controllerOAutorizar.ocorrencia.idOcorrencia}">
+                    <f:convertNumber pattern="'#'0000000" />
+                </h:outputText>
+            </div>
+
+            A ocorrência <b>NÃO</b> será autorizada. Confirma operação?<br />
+
+            <f:facet name="footer">
+
+                <p:link id="bt-nao" styleClass="btn btn-secondary mr-2" onclick="PF('md-autorizar-nao').hide();return false;" >
+                    <i class="fa fa-remove" aria-hidden="true"></i> Não
+                </p:link>
+
+                <p:commandLink styleClass="btn btn-danger"  update="growl, :fm-tb-autorizar" oncomplete="closeDialog(args, 'md-autorizar-nao')" actionListener="#{controllerOAutorizar.notAuthorize()}">
+                    <i class="fa fa-check" aria-hidden="true"></i> Sim
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>        
+    </h:form>
+
+</ui:fragment>

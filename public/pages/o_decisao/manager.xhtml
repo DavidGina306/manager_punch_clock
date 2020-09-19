@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-nova-decisao" styleClass="form-horizontal">
+        <p:dialog widgetVar="md-nova-decisao" styleClass="modal-response" width="650" height="400" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+
+            <f:facet name="header">
+                <h4 class="modal-title">Ocorrência</h4>
+            </f:facet>
+
+            <div class="form-group row my-1">
+                <h:outputLabel styleClass="col-sm-2 col-form-label text-right py-0" value="Funcionário: " />
+                <div class="col-sm-10">
+                    <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.idFuncionario}</p>
+                </div>
+            </div>             
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group row my-1">
+                        <h:outputLabel styleClass="col-sm-4 col-form-label text-right py-0" value="Tipo: " />
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.tipo}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group row my-1">
+                        <h:outputLabel styleClass="col-sm-4 col-form-label text-right py-0" value="Motivo: " />
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.motivo}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group row my-1">
+                        <h:outputLabel styleClass="col-sm-4 col-form-label text-right py-0" value="Dt. inicial: " />
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.dataInicial}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group row my-1">
+                        <h:outputLabel styleClass="col-sm-4 col-form-label text-right py-0" value="Dt. final: " />
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.dataFinal}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group row my-1">
+                        <h:outputLabel styleClass="col-sm-4 col-form-label text-right py-0" value="Autorizador: " />
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.idAutorizador}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group row my-1">
+                        <h:outputLabel styleClass="col-sm-4 col-form-label text-right py-0" value="Situação: " />
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.situacao}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row my-1">
+                <h:outputLabel styleClass="col-sm-2 col-form-label text-right py-0" value="Comprovante: " />
+                <div class="col-sm-10">
+                    <p:lightBox id="lightbox">  
+                        <h:outputLink value="#" rendered="#{controllerODecisao.ocorrencia.blArquivo ne null}" styleClass="badge badge-warning"> 
+                            #{controllerODecisao.ocorrencia.txNomeArquivo}
+                        </h:outputLink>
+
+                        <f:facet name="inline">
+                            <img src="data:image;base64,#{controllerODecisao.ocorrencia.arquivoBase64}" class="img-rounded" style="height: 600px; width: 500px" />
+                        </f:facet>  
+                    </p:lightBox>
+                </div>
+            </div> 
+            <div class="form-group row my-1">
+                <h:outputLabel styleClass="col-sm-2 col-form-label text-right py-0" value="Observação: " />
+                <div class="col-sm-10">
+                    <p class="form-control-plaintext text-truncate py-0">#{controllerODecisao.ocorrencia.txObservacao}</p>
+                </div>
+            </div> 
+            <hr />
+            <p:outputPanel id="pn-decisao" styleClass="d-inline">
+                <div class="form-row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <h:outputLabel for="decisao" value="Decisão" />
+                            <p:selectOneMenu id="decisao" value="#{controllerODecisao.ocorrencia.csDecisao}" required="true" requiredMessage="Informe a decisão" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="0" itemLabel="Abonar com comprovante" />
+                                <f:selectItem itemValue="1" itemLabel="Abonar sem comprovante" />
+                                <f:selectItem itemValue="4" itemLabel="Horas a compensar" />
+                                <f:selectItem itemValue="5" itemLabel="Horas compensadas" />
+                                <f:selectItem itemValue="2" itemLabel="Descontar hora(s)" />
+                                <f:selectItem itemValue="3" itemLabel="Outros" />
+
+                                <p:ajax event="change" update="pn-decisao" listener="#{controllerODecisao.calculateHours()}"/>
+                            </p:selectOneMenu>
+                        </div> 
+                    </div> 
+                    <div class="col">
+                        <div class="form-group">
+                            <p:outputLabel for="hr-descontar" value="Hora(s)"/>
+                            <p:inputMask id="hr-descontar" value="#{controllerODecisao.ocorrencia.txHrDescontada}" required="#{controllerODecisao.ocorrencia.csDecisao eq 2}" requiredMessage="Informe a(s) hora(s) a descontar" mask="99:99:99" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p:outputLabel for="justificativa" value="Justificativa"/>
+                    <p:inputTextarea id="justificativa" style="resize: none;" value="#{controllerODecisao.ocorrencia.txJustificativa}" required="#{controllerODecisao.ocorrencia.csDecisao gt 0}" requiredMessage="Informe a justificativa" rows="2" autoResize="false" />
+                </div>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <button id="bt-cancelar" type="button" onclick="PF('md-nova-decisao').hide();"  class="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </button>
+
+                <p:commandLink id="bt-finalizar" actionListener="#{controllerODecisao.finished()}" update="growl, :fm-tb-decisao" oncomplete="closeDialog(args, 'md-nova-decisao')"  styleClass="btn btn-success mr-2">
+                    <i class="fa fa-check" aria-hidden="true"></i> Finalizar
+                </p:commandLink>
+
+                <p:commandLink id="bt-salvar" actionListener="#{controllerODecisao.manager()}" update="growl, :fm-tb-decisao" oncomplete="closeDialog(args, 'md-nova-decisao')" styleClass="btn btn-primary" >
+                    <i class="fa fa-save" aria-hidden="true"></i> Salvar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+    </h:form>
+
+</ui:fragment>

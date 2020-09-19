@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-perfil-funcionario">
+
+        <p:dialog id="md-perfil-funcionario" widgetVar="md-perfil-funcionario" styleClass="modal-response" width="550" modal="true" resizable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+            <p:defaultCommand target="bt-salvar" />
+            
+            <f:facet name="header">
+                <h4 class="modal-title">Funcionário</h4>
+            </f:facet>
+
+            <p:outputPanel id="pn-perfil-funcionario">
+
+                <p:focus context="pn-perfil-funcionario"/>
+
+                <div class="form-group">
+                    <p:outputLabel for="nome" value="Nome"/>
+                    <p:inputText id="nome" required="true" requiredMessage="Informe o nome" value="#{controllerFHome.funcionario.txNome}"/>
+                </div>
+
+                <div class="form-group">
+                    <p:outputLabel for="tipo"  rendered="#{controllerHome.accessAuthorized(4)}" value="Tipo" />
+                    <p:selectOneMenu id="tipo"  rendered="#{controllerHome.accessAuthorized(4)}" required="true" requiredMessage="Informe o tipo" value="#{controllerFHome.funcionario.csTipo}" filter="true" filterMatchMode="contains" styleClass="form-control" panelStyleClass="hideDisabled">
+                        <f:selectItem itemValue="" itemLabel=""/>
+                        <f:selectItem itemValue="0" itemDisabled="#{!controllerHome.accessAuthorized(5)}" itemLabel="Administrador" />
+                        <f:selectItem itemValue="1" itemLabel="Autorizador" />
+                        <f:selectItem itemValue="4" itemLabel="Colaborador" />
+                        <f:selectItem itemValue="3" itemLabel="Departamento pessoal" />
+                        <f:selectItem itemValue="2" itemLabel="Portaria" />
+                    </p:selectOneMenu>
+                </div>
+
+            </p:outputPanel>
+
+            <f:facet name="footer">
+
+                <p:link id="bt-cancelar" onclick="PF('md-perfil-funcionario').hide();return false;" styleClass="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </p:link>
+
+                <p:commandLink id="bt-salvar" update="growl, pn-perfil-funcionario, :fm-navbar" oncomplete="closeDialog(args, 'md-perfil-funcionario')" actionListener="#{controllerFHome.insertOrUpdate()}" styleClass="btn btn-primary" >
+                    <i class="fa fa-save" aria-hidden="true"></i> Salvar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>
+
+    </h:form>
+
+</ui:fragment>

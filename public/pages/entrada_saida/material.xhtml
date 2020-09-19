@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets"> 
+
+    <h:form id="fm-es-material">
+        <p:dialog id="md-es-material" widgetVar="md-es-material" styleClass="modal-response" onHide="inputPortaria()" width="400" modal="true" resizable="false" closeOnEscape="true" closable="true" responsive="true" showEffect="fade" >
+
+            <p:defaultCommand target="bt-confimar" />
+            <p:focus context="fm-es-material" />
+
+            <f:facet name="header">
+                <h4 class="modal-title">Ocorrência</h4>
+            </f:facet>
+
+            <p:dataList 
+                id="material-list"
+                value="#{controllerEntradaSaida.ocorrencia.tbOcorrenciaMaterialList}" 
+                var="material" 
+                paginator="true" 
+                paginatorPosition="top"
+                paginatorAlwaysVisible="true"   
+                emptyMessage="Nenhum registro encontrado"
+                rows="5"
+                styleClass="material-list">
+
+                <h:outputText value=" #{material.txDescricao}" />
+                <label>- #{material.nbQuantidade} UN</label>
+                <h:outputText value="#{material.csRetorno ? '' : ' (Sem retorno)'}" />
+
+            </p:dataList>               
+
+            <f:facet name="footer">
+
+                <p:link id="bt-cancelar" onclick="PF('md-es-material').hide();return false;" styleClass="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </p:link>
+
+                <p:commandLink id="bt-confimar" update="growl, :fm-tb-portaria:tb-portaria" oncomplete="closeDialog(args, 'md-es-material')" actionListener="#{controllerEntradaSaida.confirmEntryOrExit()}" styleClass="btn btn-primary" >
+                    <i class="fa fa-check" aria-hidden="true"></i> Confirmar
+                </p:commandLink>
+
+            </f:facet>
+
+        </p:dialog>        
+    </h:form>
+
+</ui:fragment>

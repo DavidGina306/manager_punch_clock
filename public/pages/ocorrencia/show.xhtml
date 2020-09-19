@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">     
+
+    <h:form id="fm-visualizar-ocorrencia" >
+        <p:dialog id="md-visualizar-ocorrencia" widgetVar="md-visualizar-ocorrencia" styleClass="modal-ocorrencia modal-response" height="400" width="600" modal="true" resizable="false" draggable="false" closeOnEscape="true" responsive="true" showEffect="fade" >
+
+            <p:link id="bt-close" styleClass="ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all" onclick="PF('md-visualizar-ocorrencia').hide();return false;" >
+                <span class="ui-icon ui-icon-closethick"></span>
+            </p:link>
+
+            <span class="badge badge-dark badge-banner">#{controllerOcorrencia.getModalBadge(controllerOcorrencia.ocorrencia.csTipo)}</span>
+
+            <div id="tabs">
+
+                <ul class="nav nav-tabs">
+
+                    <li role="presentation" class="nav-item">
+                        <a id="nv-item-ocorrencia" class="nav-link" href="#show-ocorrencia" aria-controls="ocorrencia" role="tab" data-toggle="tab">Ocorrência</a>
+                    </li>
+
+                    <li role="presentation" class="nav-item #{controllerOcorrencia.ocorrencia.csTipo == 0 || controllerOcorrencia.ocorrencia.csTipo == 4 ? 'd-block' : 'd-none'}">
+                        <a id="nv-item-material" class="nav-link" href="#show-material" aria-controls="material" role="tab" data-toggle="tab">Material</a>
+                    </li>
+
+                    <li role="presentation" class="nav-item #{controllerOcorrencia.ocorrencia.csTipo == 0 || controllerOcorrencia.ocorrencia.csTipo == 5 ? 'd-block' : 'd-none'}">
+                        <a id="nv-item-veiculo" class="nav-link" href="#show-veiculo" aria-controls="veiculo" role="tab" data-toggle="tab">Veículo</a>
+                    </li>
+
+                    <li role="presentation" class="nav-item #{controllerOcorrencia.ocorrencia.csFinalizada ? 'd-block' : 'd-none'}">
+                        <a id="nv-item-decisao" class="nav-link" href="#show-decisao" aria-controls="decisao" role="tab" data-toggle="tab">Decisão</a>
+                    </li>
+
+                </ul>  
+
+                <p:outputPanel id="panel" styleClass="tab-content">
+
+                    <div role="tabpanel" class="tab-pane active" id="show-ocorrencia">
+
+                        <div class="form-group">
+                            <p:outputLabel for="funcionario" value="Funcionário" />
+                            <p:selectOneMenu id="funcionario" disabled="#{controllerOcorrencia.ocorrencia.idFuncionario.csTipo gt 2}" value="#{controllerOcorrencia.ocorrencia.idFuncionario}" converter="converterFuncionario" filter="true" filterMatchMode="contains" styleClass="input-disabled" >
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItems value="#{controllerOcorrencia.listFuncionario}" var="funcionario" itemValue="#{funcionario}" itemLabel="#{funcionario}"/>
+                            </p:selectOneMenu>
+                        </div>    
+
+                        <p:outputPanel id="pn-ocorrencia">                            
+                            <p:focus context="pn-ocorrencia"/>
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <p:outputLabel for="tipo" value="Tipo" />
+                                    <p:inputText id="tipo" value="#{controllerOcorrencia.ocorrencia.tipo}" readonly="true" />    
+                                </div>
+
+                                <div class="form-group col">
+                                    <p:outputLabel for="motivo" value="Motivo" />
+                                    <p:inputText id="motivo" value="#{controllerOcorrencia.ocorrencia.motivo}" readonly="true" />    
+                                </div>
+
+                                <div class="form-group col">
+                                    <p:outputLabel for="situacao" value="Situação" />
+                                    <p:inputText id="situacao" value="#{controllerOcorrencia.ocorrencia.situacao}" readonly="true" />    
+                                </div>
+                            </div>
+
+                            <div class="form-row">                               
+                                <div class="form-group col">
+                                    <p:outputLabel for="dt-inicial" value="Data inicial" />
+                                    <p:inputText id="dt-inicial" value="#{controllerOcorrencia.ocorrencia.dataInicial}" disabled="true" styleClass="input-disabled"/>
+                                </div>
+
+                                <div class="form-group col">
+                                    <p:outputLabel for="dt-final" value="Data final" />
+                                    <p:inputText id="dt-final" value="#{controllerOcorrencia.ocorrencia.dataFinal}" disabled="true" styleClass="input-disabled"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p:outputLabel for="observacao" value="Observação" />
+                                <p:inputText id="observacao" value="#{controllerOcorrencia.ocorrencia.txObservacao}" disabled="true" styleClass="input-disabled"/>
+                            </div>
+
+                        </p:outputPanel>  
+
+                        <div id="comprovante" class="comprovante text-center #{controllerOcorrencia.ocorrencia.csMotivo eq 3 ? 'd-block' : 'd-none'}">
+                            <span class="badge badge-danger">Em caso de consulta médica ou odontológica, envie o comprovante em até 48h.</span>
+                        </div>
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="show-material">                     
+
+                        <p:dataTable id="tb-material" 
+                                     var="material" 
+                                     value="#{controllerOcorrencia.ocorrencia.tbOcorrenciaMaterialList}" 
+                                     reflow="true"                     
+                                     scrollable="true"
+                                     scrollHeight="127"
+                                     selectionMode="single"                      
+                                     rowKey="#{material}"
+                                     emptyMessage="Nenhum registro encontrado"    
+                                     styleClass="table-material table-sm d-inline-block"
+                                     >         
+
+                            <p:column headerText="Descrição">
+                                <h:outputText value="#{material.txDescricao}" />
+                            </p:column>   
+
+                            <p:column headerText="Quantidade">
+                                <h:outputText value="#{material.nbQuantidade}" />
+                            </p:column>
+
+                            <p:column headerText="Retorna">
+                                <h:outputText value="#{material.csRetorno ? 'Sim' : 'Não'}" />
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="show-veiculo">
+
+                        <div class="form-group">
+                            <p:outputLabel for="veiculo" value="Veículo" />
+                            <p:selectOneMenu id="veiculo" value="#{controllerOcorrencia.ocorrencia.idVeiculo}" converter="converterVeiculo" filter="true" filterMatchMode="contains" disabled="true" styleClass="input-disabled">
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItems value="#{controllerOcorrencia.listVeiculo}" var="veiculo" itemValue="#{veiculo}" itemLabel="#{veiculo}"/>
+                            </p:selectOneMenu>
+                        </div>  
+
+                        <div class="form-group">
+                            <p:outputLabel for="destino" value="Destino"/>
+                            <p:inputText id="destino" value="#{controllerOcorrencia.ocorrencia.txDestino}" disabled="true" styleClass="input-disabled"/>
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel for="finalidade" value="Finalidade" />
+                            <p:inputText id="finalidade" value="#{controllerOcorrencia.ocorrencia.txFinalidade}" disabled="true" styleClass="input-disabled"/>
+                        </div>  
+
+                        <div class="form-row">
+                            <div class="col-6">
+                                <p:outputLabel for="km-inicial" value="KM inicial" />
+                                <p:inputNumber id="km-inicial" decimalPlaces="0" thousandSeparator="" value="#{controllerOcorrencia.ocorrencia.nbKmInicial}" disabled="true" styleClass="input-disabled"/>
+                            </div>
+
+                            <div class="col-6">
+                                <p:outputLabel for="km-final" value="KM final" />
+                                <p:inputNumber id="km-final" decimalPlaces="0" thousandSeparator="" value="#{controllerOcorrencia.ocorrencia.nbKmFinal}" disabled="true" styleClass="input-disabled"/>
+                            </div>   
+                        </div>   
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="show-decisao">
+
+                        <div class="form-group">
+                            <p:outputLabel for="decisao" value="Decisão" />
+                            <p:selectOneMenu id="decisao" value="#{controllerOcorrencia.ocorrencia.csDecisao}" filter="true" filterMatchMode="contains" disabled="true" styleClass="input-disabled">
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="0" itemLabel="Abonar com comprovante" />
+                                <f:selectItem itemValue="1" itemLabel="Abonar sem comprovante" />
+                                <f:selectItem itemValue="2" itemLabel="Descontar a(s) hora(s)" />
+                                <f:selectItem itemValue="3" itemLabel="Outros" />
+                            </p:selectOneMenu>
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel for="hr-descontar" value="Hora(s)" />
+                            <p:inputText id="hr-descontar" value="#{controllerOcorrencia.ocorrencia.txHrDescontada}" disabled="true" styleClass="input-disabled"/>
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel for="justificativa" value="Justificativa" />
+                            <p:inputText id="justificativa" value="#{controllerOcorrencia.ocorrencia.txJustificativa}" disabled="true" styleClass="input-disabled"/>
+                        </div>
+
+                    </div>
+
+                </p:outputPanel>  
+
+            </div> 
+
+            <f:facet name="footer">          
+
+                <div class="float-left">
+
+                    <p:commandLink id="bt-comprovante" update="fm-comprovante:pn-comprovante" onclick="PF('md-comprovante').show()" styleClass="btn btn-info mr-2  d-inline-block " >
+                        <i class="fa fa-plus" aria-hidden="true"></i> Comprovante
+                    </p:commandLink>
+
+                    <p:outputPanel autoUpdate="true" class=" d-inline-flex " >
+                        <p:lightBox id="lightbox">  
+                            <p:tooltip for="lightbox" value="Visualizar comprovante" position="top"/> 
+
+                            <h:outputLink value="#" rendered="#{controllerOcorrencia.ocorrencia.txNomeArquivo ne null}">
+                                <i class="fa fa-file-image-o fa-lg" style="line-height: 1.75em;" aria-hidden="true"></i>
+                            </h:outputLink>
+
+                            <f:facet name="inline">
+                                <img src="data:image;base64,#{controllerOcorrencia.ocorrencia.arquivoBase64}" class="img-rounded" style="height: 600px; width: 500px" />
+                            </f:facet>  
+                        </p:lightBox> 
+                    </p:outputPanel>
+
+                </div>        
+
+                <button id="bt-cancelar" type="button" onclick="PF('md-visualizar-ocorrencia').hide();"  class="btn btn-secondary mr-2">
+                    <i class="fa fa-remove" aria-hidden="true"></i> Cancelar
+                </button>
+
+                <p:commandLink id="bt-salvar" actionListener="#{controllerOcorrencia.updateFile()}" update="growl, :fm-tb-ocorrencia" oncomplete="closeDialog(args, 'md-visualizar-ocorrencia')" styleClass="btn btn-primary">
+                    <i class="fa fa-save" aria-hidden="true"></i> Salvar
+                </p:commandLink>
+            </f:facet>
+
+        </p:dialog>
+    </h:form>
+
+</ui:fragment>

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:h="http://java.sun.com/jsf/html"             
+             xmlns:f="http://java.sun.com/jsf/core"             
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="fm-tb-veiculo">
+
+        <p:dataTable id="tb-veiculo" 
+                     var="veiculo" 
+                     value="#{controllerVeiculo.listVeiculo}" 
+                     widgetVar="tb-veiculo" 
+                     reflow="true"                     
+                     scrollable="true"
+                     selectionMode="single"                      
+                     rowKey="#{veiculo}"
+                     rows="10"
+                     paginator="true"
+                     paginatorPosition="bottom"                     
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{startRecord} de {totalRecords}"
+                     rowsPerPageTemplate="5, 10, 15, 20"
+                     emptyMessage="Nenhum registro encontrado"                 
+                     >        
+
+            <f:facet name="header">
+
+                <div class="row">                 
+                    <div class="col-lg-8 col-xs-4">  
+                        <p:commandLink id="bt-atualizar" update="@form" actionListener="#{controllerVeiculo.loadListVeiculo(true)}" styleClass="btn btn-primary pull-left">
+                            <i class="fa fa-refresh" aria-hidden="true"></i> 
+                            <p:tooltip for="bt-atualizar" value="Atualizar registros" position="top"/> 
+                        </p:commandLink>                         
+                    </div>
+
+                    <div class="col-lg-4 col-xs-8">  
+                        <div class="form-group has-feedback">
+                            <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+                            <p:inputText id="globalFilter" onkeypress="filterDataTable(event, 'tb-veiculo')" styleClass="form-control" placeholder="Placa/Modelo"/>
+                        </div>
+                    </div>
+                </div>  
+
+            </f:facet>
+
+            <p:column headerText="Ativo" sortBy="#{veiculo.csAtivo}">
+                <span class="badge badge-#{veiculo.csAtivo ? 'success' : 'default'}">
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                </span>
+            </p:column>
+
+            <p:column headerText="Placa" sortBy="#{veiculo.txPlaca}" filterBy="#{veiculo.txPlaca}">
+                <h:outputText id="placa" value="#{veiculo.txPlaca.toUpperCase()}" />
+                <p:tooltip for="placa" value="#{veiculo.txPlaca.toUpperCase()}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Modelo" sortBy="#{veiculo.txModelo}" filterBy="#{veiculo.txModelo}">
+                <h:outputText id="modelo" value="#{veiculo.txModelo.toUpperCase()}" />
+                <p:tooltip for="modelo" value="#{veiculo.txModelo.toUpperCase()}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Marca" sortBy="#{veiculo.txMarca}">
+                <h:outputText id="marca" value="#{veiculo.txMarca.toUpperCase()}" />
+                <p:tooltip for="marca" value="#{veiculo.txMarca.toUpperCase()}" position="top"/>
+            </p:column>
+
+            <p:column headerText="Dt. de cadastro" sortBy="#{veiculo.dtCadastro}" >
+                <h:outputText id="dt-cadastro" value="#{veiculo.dtCadastro}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </h:outputText>
+                <p:tooltip for="dt-cadastro" value="#{veiculo.dtCadastro}" position="top">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </p:tooltip>
+            </p:column>
+
+            <p:column styleClass="ui-column-button">
+
+               <p:commandLink id="bt-editar" update=":fm-novo-veiculo" oncomplete="PF('mdVeic').show()" styleClass="btn btn-success btn-sm mr-2">
+                    <p:resetInput target=":fm-novo-veiculo" />
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <f:actionListener binding="#{controllerVeiculo.loadListDepartamento()}" />
+                    <f:actionListener binding="#{controllerVeiculo.loadListEmpresa()}" />
+                    <f:setPropertyActionListener value="#{veiculo}" target="#{controllerVeiculo.veiculo}" />
+                    <p:tooltip for="bt-editar" value="Editar" position="top"/> 
+                </p:commandLink> 
+                
+            <!--    <p:commandLink id="bt-editar" update=":fm-novo-funcionario" oncomplete="PF('md-novo-funcionario').show()" styleClass="btn btn-success btn-sm mr-2">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <p:resetInput target=":fm-novo-funcionario" />
+                    <f:actionListener binding="# {controllerFuncionario.loadListDepartamento()}" />
+                    <f:actionListener binding="# {controllerFuncionario.loadListEmpresa()}" />
+                    <f:setPropertyActionListener value="# {funcionario}" target="# {controllerFuncionario.funcionario}" />
+                    <p:tooltip for="bt-editar" value="Editar" position="top"/> 
+                </p:commandLink>
+-->
+                <p:commandLink id="bt-excluir" rendered="#{controllerHome.accessAuthorized(0)}" update=":fm-excluir-veiculo" oncomplete="PF('md-excluir-veiculo').show()" styleClass="btn btn-danger btn-sm">                    
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <f:setPropertyActionListener value="#{veiculo}" target="#{controllerVeiculo.veiculo}" />
+                    <p:tooltip for="bt-excluir" value="Excluir" position="top"/> 
+                </p:commandLink>
+
+            </p:column>
+
+            <f:facet name="footer" >
+                Total de #{controllerVeiculo.listVeiculo.size()} registro(s).
+            </f:facet>
+
+        </p:dataTable>
+    </h:form>
+</ui:fragment>
